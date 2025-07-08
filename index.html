@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trending GitHub Repos Tracked</title>
+</head>
+<body>
+  <h1>Trending GitHub Repositories Tracked</h1>
+  <ul id="repo-list"></ul>
+
+  <script>
+    fetch('_data/trending_checked.yml')
+      .then(r => r.text())
+      .then(data => {
+        const repos = data.split('\n').filter(l => l.startsWith('-')).map(l => l.slice(2));
+        const ul = document.getElementById('repo-list');
+        repos.forEach(repo => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `https://github.com/${repo}`;
+          a.textContent = repo;
+          a.target = "_blank";
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+      });
+  </script>
+</body>
+</html>
