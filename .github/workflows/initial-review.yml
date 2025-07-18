@@ -23,7 +23,7 @@ jobs:
         run: npm install @actions/github @actions/core node-fetch
 
       - name: Run initial-review script
-        run: node ./.github/scripts/initial_review.js
+        run: node ./.github/scripts/initial_review.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
