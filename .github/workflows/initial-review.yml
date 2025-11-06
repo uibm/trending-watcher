@@ -2,6 +2,8 @@ name: Initial Review of Trending Repo Issues
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '36 1 * * *'
 
 permissions:
   issues: write
