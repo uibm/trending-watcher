@@ -1,0 +1,31 @@
+name: DeepWiki Enhanced Review
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '45 1 * * *'
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  deepwiki-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install @actions/github @actions/core node-fetch jsdom
+
+      - name: Run DeepWiki review script
+        run: node ./.github/scripts/deepwiki_review.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

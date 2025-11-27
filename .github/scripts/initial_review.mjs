@@ -20,14 +20,51 @@ async function getOpenIssues() {
 }
 
 async function fetchReadme(toOwner, toRepo) {
-  const url = `https://raw.githubusercontent.com/${toOwner}/${toRepo}/main/README.md`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to fetch README (${res.status})`);
-  return await res.text();
+  const branches = ['main', 'master'];
+
+  for (const branch of branches) {
+    try {
+      const url = `https://raw.githubusercontent.com/${toOwner}/${toRepo}/${branch}/README.md`;
+      const res = await fetch(url);
+      if (res.ok) {
+        return await res.text();
+      }
+    } catch (e) {
+      // Try next branch
+    }
+  }
+
+  throw new Error('README not found in main or master branch');
 }
 
 function summarize(readme) {
-  return readme.split("\n").slice(0, 10).join(" ").slice(0, 500);
+  // Remove leading whitespace and find first meaningful paragraph
+  const lines = readme.split('\n').map(l => l.trim());
+
+  // Skip initial headers, badges, images
+  let startIdx = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    // Skip empty lines, headers, badges, images
+    if (!line || line.startsWith('#') || line.startsWith('[![') ||
+        line.startsWith('![') || line.startsWith('[!') ||
+        line.match(/^<(p|div|img|a)/i)) {
+      continue;
+    }
+    startIdx = i;
+    break;
+  }
+
+  // Collect lines until we hit empty line or next section
+  let paragraph = [];
+  for (let i = startIdx; i < lines.length && paragraph.length < 15; i++) {
+    const line = lines[i];
+    if (!line && paragraph.length > 0) break; // End of paragraph
+    if (line.startsWith('#')) break; // Next section
+    if (line) paragraph.push(line);
+  }
+
+  return paragraph.join(' ').slice(0, 600);
 }
 
 async function run() {
