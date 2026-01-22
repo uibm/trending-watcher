@@ -2,7 +2,7 @@
 
 An automated journal that tracks trending GitHub repositories daily and provides intelligent reviews using web scraping and AI-powered documentation.
 
-## 🤝 Credits
+## Credits
 
 This project is powered by:
 
