@@ -15,4 +15,4 @@ This project is powered by:
 
 **Built with ❤️ using GitHub Actions and DeepWiki**
 
-*This project demonstrates the power of automated workflows and web scraping for creating useful developer tools without requiring API keys.*
+*This project demonstrates the power of automated workflows and web scraping for creating useful developer tools without requiring API keys. Thanks*
